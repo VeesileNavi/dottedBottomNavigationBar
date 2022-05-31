@@ -67,12 +67,12 @@ class _MyApp extends State<MyApp> with SingleTickerProviderStateMixin {
                     AnimatedContainer(color: Colors.black, height: containerHeight, width: 100, duration: Duration(seconds: 1),),
                     CustomPaint(
                       size: Size(200, (200*0.8089887640449438).toDouble()),
-                      painter: ShapePainter(true),
+                      painter: ShapePainter(isSelected),
                     ),
                   ],
                 ),
               ),
-              ElevatedButton(onPressed: (){setState((){containerHeight = 1;});}, child: Text("press me"))
+              ElevatedButton(onPressed: (){setState((){isSelected=!isSelected;});}, child: Text("press me"))
             ],
           ),
         ),
@@ -103,11 +103,10 @@ class ShapePainter extends CustomPainter {
       path.cubicTo(size.width*0.4756000,size.height*0.2237514,size.width*0.4881933,size.height*0.2250125,size.width*0.5010584,size.height*0.2250125);
       path.close();
     } else {
-      path.moveTo(44.5942, 16.2009);
-      path.moveTo(88.8406,0.0012207);
-      path.lineTo(88.8406,72);
-      path.lineTo(0.347824,72);
-      path.lineTo(0.347839,0.0012207);
+      path.moveTo(size.width*0.9982090,size.height*0.00001695417);
+      path.lineTo(size.width*0.9982090,size.height);
+      path.lineTo(size.width*0.003908135,size.height);
+      path.lineTo(size.width*0.003908303,size.height*0.00001695417);
       path.close();
     }
 
@@ -116,6 +115,6 @@ class ShapePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 }
