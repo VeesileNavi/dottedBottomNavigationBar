@@ -14,11 +14,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyApp extends State<MyApp> with SingleTickerProviderStateMixin {
-  late Animation<bool> animation;
+  late Animation<double> animation;
   late AnimationController _controller;
-  bool isSelected = false;
+  bool isSelected = true;
 
-  Tween<bool> selectionTween = Tween(begin: false, end: true);
+  Tween<double> selectionTween = Tween(begin: 0, end: 0.2250125);
 
   double containerHeight = 100;
 
@@ -27,7 +27,7 @@ class _MyApp extends State<MyApp> with SingleTickerProviderStateMixin {
     super.initState();
     containerHeight = 100;
     _controller =
-        AnimationController(duration: Duration(seconds: 4), vsync: this);
+        AnimationController(duration: Duration(seconds: 1), vsync: this);
 
     animation = selectionTween.animate(_controller)
       ..addListener(() {
@@ -58,21 +58,22 @@ class _MyApp extends State<MyApp> with SingleTickerProviderStateMixin {
             backgroundColor: Colors.redAccent),
         body: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 height: 100,
                 width: 200,
                 child: Stack(
                   children: [
-                    AnimatedContainer(color: Colors.black, height: containerHeight, width: 100, duration: Duration(seconds: 1),),
+                    AnimatedContainer(color: Colors.transparent, height: containerHeight, width: 100, duration: Duration(seconds: 1),),
                     CustomPaint(
                       size: Size(200, (200*0.8089887640449438).toDouble()),
-                      painter: ShapePainter(isSelected),
+                      painter: ShapePainter(animation.value),
                     ),
                   ],
                 ),
               ),
-              ElevatedButton(onPressed: (){setState((){isSelected=!isSelected;});}, child: Text("press me"))
+              ElevatedButton(onPressed: (){setState((){_controller.forward();});}, child: Text("press me"))
             ],
           ),
         ),
@@ -82,33 +83,24 @@ class _MyApp extends State<MyApp> with SingleTickerProviderStateMixin {
 }
 
 class ShapePainter extends CustomPainter {
-  bool isSelected = false;
 
-  ShapePainter(this.isSelected);
+  double curvePainter = 0.2250125;
+
+  ShapePainter(this.curvePainter);
 
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Colors.teal
-      ..strokeWidth = 5;
+      ..color = Colors.teal;
     Path path = Path();
-    if (isSelected) {
-      path.moveTo(size.width*0.5010584,size.height*0.2250125);
-      path.cubicTo(size.width*0.5139247,size.height*0.2250125,size.width*0.5265169,size.height*0.2237514,size.width*0.5387371,size.height*0.2213347);
-      path.cubicTo(size.width*0.6957663,size.height*0.1902875,size.width*0.8385764,size.height*0.00001695417,size.width*0.9982090,size.height*0.00001695417);
-      path.lineTo(size.width*0.9982090,size.height);
+
+      path.moveTo(size.width*0.5010584,size.height*curvePainter/**.2250125**/);
+      path.cubicTo(size.width*0.6957663,size.height*curvePainter/**.2250125**/,size.width*0.8385764,size.height*0.00001695417,size.width,size.height*0.00001695417);
+      path.lineTo(size.width,size.height);
       path.lineTo(size.width*0.003908135,size.height);
       path.lineTo(size.width*0.003908303,size.height*0.00001695417);
-      path.cubicTo(size.width*0.1635416,size.height*0.00001695417,size.width*0.3063517,size.height*0.1902875,size.width*0.4633798,size.height*0.2213347);
-      path.cubicTo(size.width*0.4756000,size.height*0.2237514,size.width*0.4881933,size.height*0.2250125,size.width*0.5010584,size.height*0.2250125);
+      path.cubicTo(size.width*0.1635416,size.height*0.00001695417,size.width*0.3063517,size.height*curvePainter/**.2250125**/,size.width*0.5010584,size.height*curvePainter/**.2250125**/);
       path.close();
-    } else {
-      path.moveTo(size.width*0.9982090,size.height*0.00001695417);
-      path.lineTo(size.width*0.9982090,size.height);
-      path.lineTo(size.width*0.003908135,size.height);
-      path.lineTo(size.width*0.003908303,size.height*0.00001695417);
-      path.close();
-    }
 
     canvas.drawPath(path, paint);
   }
